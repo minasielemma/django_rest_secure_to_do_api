@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-django
+  namespace: django-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app  
+    spec:
+      containers:
+      - name: django-app
+        image: docker.pkg.github.com/minasielemma/django_rest_secure_to_do_api/django_rest_secure_to_do_api-web-web:latest
+        ports:
+        - containerPort: 8000
