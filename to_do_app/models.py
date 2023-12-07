@@ -9,8 +9,13 @@ class Plan(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     modified_at = models.DateTimeField(auto_now=True)
+    fetch_count = models.IntegerField(default=0)
     class Meta:
         unique_together =("plan_name", "owner")
+        indexes = [
+            models.Index(fields=['plan_name', 'owner']),
+            models.Index(fields=['created_at', 'modified_at']),
+        ]
 
 class Task(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
@@ -19,5 +24,10 @@ class Task(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    fetch_count = models.IntegerField(default=0)
     class Meta:
         unique_together = ("plan", "task_name")
+        indexes = [
+            models.Index(fields=['plan', 'task_name']),
+            models.Index(fields=['created_at', 'modified_at']),
+        ]
