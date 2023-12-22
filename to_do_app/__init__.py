@@ -1,1 +1,1 @@
-default_app_config = 'to_do_app.apps.ApisConfig'
+default_app_config = 'to_do_app.apps.ToDoAppConfig'

@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
 from .models import Plan, Task
 
 class UserSerializer(serializers.ModelSerializer):
@@ -69,4 +72,19 @@ class TaskSerializer(serializers.ModelSerializer):
         instance.start_time = validated_data["start_time"]
         instance.end_time = validated_data["end_time"]
         instance.save()
-        return instance    
+        return instance  
+    
+    def perform_create(self, serializer):
+        instance = serializer.save()
+
+        # get the channel layer for sending messages
+        channel_layer = get_channel_layer()
+
+        # send a notification to the client
+        async_to_sync(channel_layer.group_send)(
+            "notification_group",
+            {
+                "type": "send_notification",
+                "text": json.dumps({'message': f'New object created at {timezone.now()}'})
+            }
+        )  

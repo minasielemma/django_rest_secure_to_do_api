@@ -9,7 +9,7 @@ SECRET_KEY = env("SECRET_KEY")
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost",
+   "*",
 ]
 
 INSTALLED_APPS = [
@@ -25,9 +25,12 @@ INSTALLED_APPS = [
    
    
    "to_do_app",
-   "auth_app"
+   "auth_app",
+   "channels"
 ]
 
+
+NOTIFICATIONS_USE_JSONFIELD = True
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -38,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -85,6 +89,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'secure_to_do.wsgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+           "hosts": [('redis', 6379)],
+        },
+    },
+} 
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -116,3 +128,4 @@ STATIC_URL = env("STATIC_URL")
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = 'static/'

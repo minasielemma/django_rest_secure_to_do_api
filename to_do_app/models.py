@@ -10,6 +10,7 @@ class Plan(models.Model):
     end_time = models.DateTimeField()
     modified_at = models.DateTimeField(auto_now=True)
     fetch_count = models.IntegerField(default=0)
+    channel_name = models.CharField(max_length=100, unique=True, null=True)
     class Meta:
         unique_together =("plan_name", "owner")
         indexes = [
@@ -25,6 +26,7 @@ class Task(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     fetch_count = models.IntegerField(default=0)
+    channel_name = models.CharField(max_length=100, unique=True, null=True)
     class Meta:
         unique_together = ("plan", "task_name")
         indexes = [
