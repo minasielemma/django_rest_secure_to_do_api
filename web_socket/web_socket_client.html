@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Example</title>
+</head>
+<body>
+    <script>
+        // Create a WebSocket connection
+var socket = new WebSocket('ws://localhost:8000/ws/notifications/1/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAzMjc3Mjk2LCJpYXQiOjE3MDMyNzAwOTYsImp0aSI6ImQxYzIyNmY4NWZjZjQyZWQ5YTU0ZGY2MzIxMGMzNGIzIiwidXNlcl9pZCI6MX0.pvKC6eVSMPnVGVpBdSuHQWHjwrsmt4_kf_0U-TBvLAQ');
+// Handle connection open event
+socket.onopen = () => {
+  console.log('WebSocket connection established.');
+
+  // Add Bearer token header
+  const token = 'your_bearer_token_here';
+  socket.send = function(data) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    WebSocket.prototype.send.call(this, data, headers);
+  };
+
+  // Send a message to the server
+  const message = {
+    action: 'subscribe',
+    channel: 'notifications',
+  };
+  socket.send(JSON.stringify(message));
+};
+
+// Handle incoming messages from the server
+socket.onmessage = (event) => {
+  const message = JSON.parse(event.data);
+  console.log('Received message:', message);
+  // Process the received message as needed
+};
+
+// Handle connection close event
+socket.onclose = () => {
+  console.log('WebSocket connection closed.');
+};
+
+// Handle connection error event
+socket.onerror = (error) => {
+  console.error('WebSocket error:', error);
+};
+    </script>
+</body>
+</html>
