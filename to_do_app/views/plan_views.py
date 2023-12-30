@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 
 import datetime
 from ..permissions import IsOwnerOfPlan
-from ..serializers import PlanSerializer, TaskSerializer
+from ..serializers import PlanSerializer, TaskSerializer,UserSerializer
 from ..models import Plan, Task
 
 class PlanView(APIView):
@@ -26,8 +26,8 @@ class PlanView(APIView):
         try:
             if request.method == "POST":
                 json_data = JSONParser().parse(request)
-                start_time = datetime.datetime.strptime(json_data['start_time'],  "%Y-%m-%dT%H:%M:%S")
-                end_time = datetime.datetime.strptime(json_data['end_time'], "%Y-%m-%dT%H:%M:%S")
+                start_time = datetime.datetime.strptime(json_data['start_time'],  '%Y-%m-%dT%H:%M:%S.%f')
+                end_time = datetime.datetime.strptime(json_data['end_time'], '%Y-%m-%dT%H:%M:%S.%f')
                 check_case_1 = Plan.objects.filter( owner=request.user, start_time__lte=start_time, end_time__gte=start_time)
                 if check_case_1.exists():
                     return Response(data={"error":"There is another plan on time given"}, status=status.HTTP_400_BAD_REQUEST)
@@ -38,8 +38,7 @@ class PlanView(APIView):
                 if check_case_3.exists():
                     return Response(data={"error":"There is another plan on time given"}, status=status.HTTP_400_BAD_REQUEST)
                 user = get_object_or_404(User, username = request.user.username)
-                json_data["owner"] = user.id
-                serializer = PlanSerializer(data=json_data)
+                serializer = PlanSerializer(data=json_data, context={"owner": request.user})
                 if serializer.is_valid():
                     serializer.save()
                     return Response(data=serializer.data, status=status.HTTP_201_CREATED) 

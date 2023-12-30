@@ -24,16 +24,16 @@ class PlanSerializer(serializers.ModelSerializer):
     
     
     title = 'Plan Serializer'
-    owner_data = UserSerializer(read_only=True)
+    owner = UserSerializer(read_only=True)
     
     
     class Meta:
         model = Plan
-        fields = ['id','plan_name','owner','created_at','start_time','end_time','modified_at','owner_data']
+        fields = ['id','plan_name','owner','created_at','start_time','end_time','modified_at']
     
     
-    def create(self, validated_data):
-        plan = Plan.objects.create(**validated_data)
+    def create(self, validated_data):        
+        plan = Plan.objects.create(owner=self.context["owner"],**validated_data)
         plan.save()
         return plan
     
