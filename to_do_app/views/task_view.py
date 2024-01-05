@@ -32,8 +32,8 @@ class TaskView(APIView):
                     plan = Plan.objects.get(owner=request.user, id = pid)
                 except Plan.DoesNotExist:
                     return HttpResponse(status=status.HTTP_403_FORBIDDEN)
-                start_time = datetime.datetime.strptime(json_data['start_time'],  "%Y-%m-%dT%H:%M:%S")
-                end_time = datetime.datetime.strptime(json_data['end_time'], "%Y-%m-%dT%H:%M:%S")
+                start_time = datetime.datetime.strptime(json_data['start_time'],  '%Y-%m-%dT%H:%M:%S.%f')
+                end_time = datetime.datetime.strptime(json_data['end_time'], '%Y-%m-%dT%H:%M:%S.%f')
                 check_case_1 = Task.objects.filter(plan__owner=request.user, start_time__lte=start_time, end_time__gte=start_time)
                 if check_case_1.exists():
                     return Response(data={"error":"There is another task on time given"}, status=status.HTTP_400_BAD_REQUEST)
@@ -43,7 +43,7 @@ class TaskView(APIView):
                 check_case_3 = Task.objects.filter(plan__owner=request.user, start_time__gte=start_time, end_time__lte=end_time)
                 if check_case_3.exists():
                     return Response(data={"error":"There is another task on time given"}, status=status.HTTP_400_BAD_REQUEST)
-                serializer = TaskSerializer(data=json_data)
+                serializer = TaskSerializer(data=json_data, context={"plan":plan} )
                 if serializer.is_valid():
                     serializer.save()
                     return Response(data=serializer.data, status=status.HTTP_201_CREATED) 

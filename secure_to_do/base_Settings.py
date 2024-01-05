@@ -8,9 +8,9 @@ env.read_env()
 SECRET_KEY = env("SECRET_KEY")
 CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOWED_ORIGINS = [
-   "*",
-]
+# CORS_ALLOWED_ORIGINS = [
+#    "*",
+# ]
 
 INSTALLED_APPS = [
    "django.contrib.admin",

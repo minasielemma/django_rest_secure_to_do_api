@@ -48,22 +48,17 @@ class PlanSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     
     
-    plan_data = PlanSerializer(read_only=False)
+    plan = PlanSerializer(read_only=True)
     title = 'Task Serializer'
     
     
     class Meta:
         model = Task
-        fields = ["id","task_name", "plan","created_at", "modified_at", "start_time","end_time","plan_data"]
+        fields = ["id","task_name","created_at", "modified_at", "start_time","end_time","plan"]
     
     
     def create(self, validated_data):
-        plan_id = validated_data.pop("plan")
-        try:
-            plan = Plan.objects.get(id = plan_id)
-        except Exception as exe:    
-            raise serializers.ValidationError({"plan": "Please create plan. There is no plan with current plan id"}) from exe
-        task = Task.objects.create(plan=plan, **validated_data)
+        task = Task.objects.create(plan=self.context["plan"], **validated_data)
         return task
     
     
