@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompos convert -f docker-compose.yml
+    kompose.version: 1.32.0 (765fde254)
+  labels:
+    io.kompose.service: daphne
+  name: daphne
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: daphne
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompos convert -f docker-compose.yml
+        kompose.version: 1.32.0 (765fde254)
+      labels:
+        io.kompose.network/django-rest-secure-to-do-api-1-default: "true"
+        io.kompose.service: daphne
+    spec:
+      containers:
+      - name: daphne
+        args:
+        - sh
+        - -c
+        - ls -a&&python manage.py migrate &&daphne -b 0.0.0.0 -p 8000 secure_to_do.asgi:application
+        image: nixo5118/secure_to_do:latest
+        name: daphne
+        ports:
+          - containerPort: 8000
+            hostPort: 8000
+            protocol: TCP
+        volumeMounts:
+        - mountPath: /django-app
+          name: daphne-claim0
+      restartPolicy: Always
+      volumes:
+        - name: daphne-claim0
+          persistentVolumeClaim:
+            claimName: daphne-claim0

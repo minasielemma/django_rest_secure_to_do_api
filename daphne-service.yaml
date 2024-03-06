@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompos convert -f docker-compose.yml
+    kompose.version: 1.32.0 (765fde254)
+  labels:
+    io.kompose.service: daphne
+  name: daphne
+spec:
+  ports:
+    - name: "8000"
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+  selector:
+    io.kompose.service: daphne

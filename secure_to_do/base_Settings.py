@@ -23,6 +23,7 @@ INSTALLED_APPS = [
    'rest_framework',
    'corsheaders',
    'rest_framework_simplejwt',
+   'debug_toolbar',
    
    
    "to_do_app",
@@ -43,6 +44,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -69,6 +71,9 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME':timezone.timedelta(days=7),
 }
 
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: True,  # Always show the toolbar
+}
 
 ROOT_URLCONF = 'secure_to_do.urls'
 

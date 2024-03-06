@@ -15,3 +15,4 @@ daphne
 twisted[http2,tls]
 python-decouple
 whitenoise
+django-debug-toolbar

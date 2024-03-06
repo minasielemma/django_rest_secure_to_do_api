@@ -26,5 +26,6 @@ urlpatterns = [
     path('auth/', include('auth_app.urls')),
     path('to_do_app/', include('to_do_app.urls')),
     path('docs/', include_docs_urls(title='Secure To do API')),
-    path('schema/', schema_view)
+    path('schema/', schema_view),
+    path('__debug__/', include('debug_toolbar.urls', namespace='djdt')),
 ]

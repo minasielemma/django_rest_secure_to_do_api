@@ -1,0 +1,17 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: todo-list
+spec: replicas: 1
+  selector: 1
+  selector:
+    matchLabels:
+      app: todo-list
+  template:
+    metadata:
+      labels:
+        app: todo-list
+      spec:
+        containers:
+          - name: todo-list-container
+            image: nixo5118/secure_to_do:latest
