@@ -123,7 +123,7 @@ DATABASES = {
     'default': env.db('DATABASE_URL')      
 }
 
-AUTH_PASSWORD_VALIDATORS = [   ]
+
 LANGUAGE_CODE = "en-GB"
 TIME_ZONE = "UTC"
 USE_I18N = True
